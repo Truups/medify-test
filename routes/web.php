@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MasterItemsController;
+use App\Http\Controllers\CategoryItemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,15 +22,26 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/master-items', [App\Http\Controllers\MasterItemsController::class, 'index']);
-Route::get('/master-items/search', [App\Http\Controllers\MasterItemsController::class, 'search']);
-Route::get('/master-items/form/{method}/{id?}', [App\Http\Controllers\MasterItemsController::class, 'formView']);
-Route::post('/master-items/form/{method}/{id?}', [App\Http\Controllers\MasterItemsController::class, 'formSubmit']);
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/master-items/view/{kode}', [App\Http\Controllers\MasterItemsController::class, 'singleView']);
-Route::get('/master-items/delete/{id}', [App\Http\Controllers\MasterItemsController::class, 'delete']);
+// Master items
+Route::get('/master-items', [MasterItemsController::class, 'index'])->name('master-items-list');
+Route::get('/master-items/search', [MasterItemsController::class, 'search']);
+Route::get('/master-items/export-pdf', [MasterItemsController::class, 'exportPdf'])->name('master-items-export-pdf');
+Route::get('/master-items/export-excel', [MasterItemsController::class, 'exportExcel'])->name('master-items-export-excel');
+Route::get('/master-items/export/{export}/status', [MasterItemsController::class, 'exportStatus'])->name('master-items-export-status');
+Route::get('/master-items/export/{export}/download', [MasterItemsController::class, 'downloadExport'])->name('master-items-export-download');
+Route::get('/master-items/form/{method}/{id?}', [MasterItemsController::class, 'formView']);
+Route::post('/master-items/form/{method}/{id?}', [MasterItemsController::class, 'formSubmit']);
+Route::get('/master-items/view/{kode}', [MasterItemsController::class, 'singleView']);
+Route::get('/master-items/delete/{id}', [MasterItemsController::class, 'delete']);
+Route::get('/master-items/update-random-data', [MasterItemsController::class, 'updateRandomData']);
 
-
-Route::get('/master-items/update-random-data', [App\Http\Controllers\MasterItemsController::class, 'updateRandomData']);
+// Category items
+Route::get('/category-items', [CategoryItemController::class, 'index'])->name('category-list');
+Route::get('/category-items/search', [CategoryItemController::class, 'search']);
+Route::get('/category-items/view/{kode}', [CategoryItemController::class, 'singleView'])->name('category-view');
+Route::get('/category-items/form/{method}/{id?}', [CategoryItemController::class, 'formView']);
+Route::post('/category-items/form/{method}/{id?}', [CategoryItemController::class, 'formSubmit']);
+Route::get('/category-items/delete/{id}', [CategoryItemController::class, 'delete']);

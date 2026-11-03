@@ -1,4 +1,4 @@
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
     @csrf
     @if($method == 'edit')
     <div class="form-group">
@@ -31,7 +31,7 @@
             <option @if($selected == 'Bukulapuk') selected @endif>Bukulapuk</option>
             <option @if($selected == 'TokoBagas') selected @endif>TokoBagas</option>
             <option @if($selected == 'E Commurz') selected @endif>E Commurz</option>
-            <optio @if($selected == 'Blublu') selected @endif>Blublu</option>
+            <option @if($selected == 'Blublu') selected @endif>Blublu</option>
         </select>
     </div>
 
@@ -43,9 +43,31 @@
             <option @if($selected == 'Obat') selected @endif>Obat</option>
             <option @if($selected == 'Alkes') selected @endif>Alkes</option>
             <option @if($selected == 'Matkes') selected @endif>Matkes</option>
-            <optio @if($selected == 'Umum') selected @endif>Umum</option>
-            <optio @if($selected == 'ATK') selected @endif>ATK</option>
+            <option @if($selected == 'Umum') selected @endif>Umum</option>
+            <option @if($selected == 'ATK') selected @endif>ATK</option>
         </select>
+    </div>
+
+    @php
+        $selected_categories = collect(old('categories', $item->categories->pluck('id')->all()));
+    @endphp
+    <div class="form-group">
+        <label>Kategori</label>
+        <select class="form-control" name="categories[]" multiple size="5">
+            @forelse ($categories as $category)
+                <option value="{{ $category->id }}" @if ($selected_categories->contains($category->id)) selected @endif>
+                    {{ $category->kode }} - {{ $category->nama }}
+                </option>
+            @empty
+                <option disabled>Belum ada kategori</option>
+            @endforelse
+        </select>
+        <small class="text-muted">Bisa pilih lebih dari satu kategori.</small>
+    </div>
+
+    <div class="form-group">
+        <label>Foto</label>
+        <input class="form-control" type="file" name="foto_barang" id="foto_barang" value="{{ $item->foto_barang ?? '' }}">
     </div>
 
     <button class="btn btn-primary mt-3">Submit</button>
